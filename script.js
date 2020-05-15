@@ -1,12 +1,12 @@
 // Definição da cena, câmera (perspectiva) e renderizador
 
-var scene = new THREE.Scene(); 
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
 alpha:true,
 antialias:true
-}); 
+});
 
 //////////////////// PARA AJUDAR VISUALIZAÇÃO, TIRAR DEPOIS ////////////////////
 var axesHelper = new THREE.AxesHelper(5);
@@ -111,9 +111,176 @@ molecule.add(bonds);
 molecule.add(atoms);
 scene.add(molecule);
 
+// Construcao dos eletrons
+// Geometria e material dos eletrons
+var e_geometry = new THREE.SphereGeometry(1, 32, 32);
+var e_material = new THREE.MeshStandardMaterial({color: 0xfd0000, metalness: 0.3, roughness: 0.5});
+
+// Definir labels dos eletrons
+var e_labela1 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb1 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela2 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb2 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela3 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb3 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var loader = new THREE.FontLoader();
+loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+  var geometry = new THREE.TextGeometry( "e", {
+    font : font,
+    size : 1.5,
+    height : 0.01,
+    curveSegments : 12,
+    bevelEnabled : false,
+    bevelThickness : 1,
+    bevelSize : 0.2,
+    bevelSegments: 10
+  } );
+  e_labela1.geometry = geometry;
+  e_labela2.geometry = geometry;
+  e_labela3.geometry = geometry;
+
+  var geometry = new THREE.TextGeometry( "-", {
+    font : font,
+    size : 1.5,
+    height : 0.01,
+    curveSegments : 12,
+    bevelEnabled : false,
+    bevelThickness : 1,
+    bevelSize : 0.2,
+    bevelSegments: 10
+  } );
+  e_labelb1.geometry = geometry;
+  e_labelb2.geometry = geometry;
+  e_labelb3.geometry = geometry;
+} );
+// Ajustar posicao dos labels
+e_labela1.position.set(2,0,1);
+e_labelb1.position.set(2+1.1,0,1.6);
+e_labela1.rotation.x = Math.PI/2;
+e_labelb1.rotation.x = Math.PI/2;
+
+e_labela2.position.set(2,0,1);
+e_labelb2.position.set(2+1.1,0,1.6);
+e_labela2.rotation.x = Math.PI/2;
+e_labelb2.rotation.x = Math.PI/2;
+
+e_labela3.position.set(2,0,1);
+e_labelb3.position.set(2+1.1,0,1.6);
+e_labela3.rotation.x = Math.PI/2;
+e_labelb3.rotation.x = Math.PI/2;
+
+// Definir orientacao das setas de spin
+var from = new THREE.Vector3(0, 0, 0);
+var to = new THREE.Vector3(0, 0, 1);
+var direction = to.clone().sub(from);
+// Construir spins up
+var arrow_u1 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
+arrow_u1.setLength(2.2,1,0.5);
+
+var arrow_u2 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
+arrow_u2.setLength(2.2,1,0.5);
+
+var arrow_u3 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
+arrow_u3.setLength(2.2,1,0.5);
+// Construir spins down
+var arrow_d1 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
+arrow_d1.setLength(2.2,1,0.5);
+
+var arrow_d2 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
+arrow_d2.setLength(2.2,1,0.5);
+
+var arrow_d3 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
+arrow_d3.setLength(2.2,1,0.5);
+
+// Construir eletron base
+var electron = new THREE.Mesh(e_geometry, e_material);
+
+// Construir eletrons com spins definido
+var electron_up1 = new THREE.Mesh();
+var electron_down1 = new THREE.Mesh();
+
+var electron_up2 = new THREE.Mesh();
+var electron_down2 = new THREE.Mesh();
+
+var electron_up3 = new THREE.Mesh();
+var electron_down3 = new THREE.Mesh();
+// Adicionar eletron e spin ao Mesh
+electron_up1.add(electron);
+electron_up1.add(arrow_u1);
+
+electron_down1.add(electron.clone());
+electron_down1.add(arrow_d1);
+electron_down1.rotation.x = Math.PI; // Rotacionar para spin down
+
+electron_up2.add(electron.clone());
+electron_up2.add(arrow_u2);
+
+electron_down2.add(electron.clone());
+electron_down2.add(arrow_d2);
+electron_down2.rotation.x = Math.PI; // Rotacionar para spin down
+
+electron_up3.add(electron.clone());
+electron_up3.add(arrow_u3);
+
+electron_down3.add(electron.clone());
+electron_down3.add(arrow_d3);
+electron_down3.rotation.x = Math.PI; // Rotacionar para spin down
+
+// Definir posicoes relativas entre eletrons
+electron_up1.position.set(1.3,0,0);
+electron_down1.position.set(-1.3,0,0);
+electron_up2.position.set(1.3,0,0);
+electron_down2.position.set(-1.3,0,0);
+electron_up3.position.set(1.3,0,0);
+electron_down3.position.set(-1.3,0,0);
+
+// Grupos de pares de eletrons a serem animados
+var electron_pair1 = new THREE.Group();
+var electron_pair2 = new THREE.Group();
+var electron_pair3 = new THREE.Group();
+// Construir primeiro par
+electron_pair1.add(electron_up1);   // Adicionar eletron com spin up
+electron_pair1.add(electron_down1); // Adicionar eletron com spin down
+electron_pair1.add(e_labela1);      // Adicionar label 1
+electron_pair1.add(e_labelb1);      // Adicionar label 2
+// Construir segundo par
+electron_pair2.add(electron_up2);
+electron_pair2.add(electron_down2);
+electron_pair2.add(e_labela2);
+electron_pair2.add(e_labelb2);
+// Construir terceiro par
+electron_pair3.add(electron_up3);
+electron_pair3.add(electron_down3);
+electron_pair3.add(e_labela3);
+electron_pair3.add(e_labelb3);
+
+//// TO DO: manipular diretamente os grupos electron_pair para fazer a animacao e demais ajustes
+//// por exemplo:
+//// electron_pair#.position.set()
+//// electron_pair#.scale.set()
+//// electron_pair#.position.x =
+//// electron_pair#.rotation.x =
+
+electron_pair1.scale.set(1/8,1/8,1/8);
+electron_pair1.position.set(0,0,2);
+
+// Adicionar pares de eletrons na cena
+scene.add(electron_pair1);
+
 // Desenhar animação
+var s = 0.05; // Rotação fixa para o spin dos eletrons
 function animate() {
     requestAnimationFrame(animate);
+
+    // Spin dos eletrons independente do movimento do par
+    electron_up1.rotation.z += s;
+    electron_down1.rotation.z += s;
+    electron_up2.rotation.z += s;
+    electron_down2.rotation.z += s;
+    electron_up3.rotation.z += s;
+    electron_down3.rotation.z += s;
+
     controls.update();
     renderer.render(scene, camera);
 }
