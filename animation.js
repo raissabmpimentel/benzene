@@ -1,4 +1,3 @@
-var startTime = Date.now( ) * 0.0005;
 var height = 1;  // Distância default do elétron ao plano xy
 var r = 1.20688; // Raio de translação
 
@@ -110,6 +109,8 @@ function updateInitialAngle(){
   initial_angle_6 -= wt;
 }
 
+var startTime; // tempo inicial da animação
+
 // Função invocada após o usuário clicar no botão play/pause
 function play(){
   // Se a animação estivesse rodando, o click significa querer pausar a animação
@@ -117,11 +118,11 @@ function play(){
     // Atualiza o ângulo inicial dos elétrons para aquele que eles pararam
     updateInitialAngle();
 
-    // Atualiza a cor e label do botão
+    // Atualiza cor e label do botão
     document.getElementById('play_button').value = 'Play';
     document.getElementById('play_button').style = "background-color: green;";
 
-    // Atualizaa variável de controle que pausa/roda a animação para pausá-la
+    // Atualiza a variável de controle que pausa/roda a animação para pausá-la
     can_update = false;
   }
   // Se a animação não estivesse rodando, o click significa querer rodar a animação
@@ -129,46 +130,76 @@ function play(){
     // Atualiza o tempo inicial da animação para o instante atual
     startTime = Date.now( ) * 0.0005;
 
-    // Atualiza a cor e label do botão
+    // Atualiza cor e label do botão
     document.getElementById('play_button').value = 'Pause';
     document.getElementById('play_button').style = "background-color: red;";
 
-    // Atualizaa variável de controle que pausa/roda a animação para roda-la
+    // Atualiza a variável de controle que pausa/roda a animação para roda-la
     can_update = true;
   }
 }
 
-function showAxis(){
-  if(showing_axis == true){
-    showing_axis = false;
-    document.getElementById('axis_button').value = 'Show Axis';
-    scene.remove(axesHelper);
-  } else{
-    showing_axis = true;
-    document.getElementById('axis_button').value = 'Hide Axis';
-    scene.add(axesHelper);
-  }
-}
-
+// Função responsável por animar a cena, basicamente, ela atualiza a posição e
+// rotação dos elétrons uma grande quantidade de vezes por segundo, de modo que
+// a cena parece estar em movimento
 function animate() {
-    requestAnimationFrame(animate);
+    requestAnimationFrame(animate); // função própria do three.js para manter
+                                    // uma taxa de fps adequada para a animação
+
+    // Obtendo o instante de tempo atual
     var time = Date.now( ) * 0.0005;
 
+    // Caso a animação não esteja pausada
     if(can_update == true){
+      // Atualiza as velocidades angulares de rotação e translação de
+      // acordo com o valor setado pelo usuário
       w_rot = parseFloat(document.getElementById("angular_rotation_speed").value);
       w_tran = parseFloat(document.getElementById("angular_translation_speed").value);
 
+      // Translada e rotaciona os elétrons de acordo com: o instante de tempo
+      // atual, as velocidades de rotação e translação setadas pelo usuário,
+      // e os ids de cada elétron
       updateElectron(electron_up_1, 1, time);
       updateElectron(electron_up_2, 2, time);
       updateElectron(electron_up_3, 3, time);
-
       updateElectron(electron_down_1, 4, time);
       updateElectron(electron_down_2, 5, time);
       updateElectron(electron_down_3, 6, time);
     }
 
+    // Atualiza a visão da cena de acordo com os comandos dados pelo usuário
+    // como rotacionar a molécula, dar zoom, ...
     controls.update();
+
+    // Desenha a cena na janela
     renderer.render(scene, camera);
 }
 
+// Função responsável por inserir o eixo xyz na cena, caso o usuário deseje
+function showAxis(){
+  // Se o eixo estiver na cena, o click significa querer removê-lo da cena
+  if(showing_axis == true){
+    // Atualiza o label do botão
+    document.getElementById('axis_button').value = 'Show Axis';
+
+    // Remove o eixo da cena
+    scene.remove(axesHelper);
+
+    // Atualiza a variável de controle que esconde/mostra o eixo para escondê-lo
+    showing_axis = false;
+  }
+  // Se o eixo não estiver na cena, o click significa querer adiciona-lo na cena
+  else{
+    // Atualiza o label do botão
+    document.getElementById('axis_button').value = 'Hide Axis';
+
+    // Insere o eixo na cena
+    scene.add(axesHelper);
+
+    // Atualiza a variável de controle que esconde/mostra o eixo para mostrá-lo
+    showing_axis = true;
+  }
+}
+
+// Invoca o loop da animação
 animate();
