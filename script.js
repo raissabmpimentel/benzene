@@ -341,9 +341,11 @@ function play(){
   if(canUpdate == true){
     canUpdate = false;
     document.getElementById('play_button').value = 'Play';
+    document.getElementById('play_button').style = "background-color: green;";
   } else{
     canUpdate = true;
     document.getElementById('play_button').value = 'Pause';
+    document.getElementById('play_button').style = "background-color: red;";
   }
 }
 
