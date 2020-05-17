@@ -6,10 +6,39 @@
 	</head>
 	<body>
         <canvas id="mycanvas"></canvas>
-        <script src="https://unpkg.com/three@0.116.1/build/three.js"></script>
-        <script src="https://unpkg.com/three@0.116.1/examples/js/controls/OrbitControls.js"></script>
+				<h1 style="text-align: center;">Benzene 3D Model</h1>
+				<table style="margin-left:auto; margin-right:auto;">
+				  <tr>
+				    <td>
+							<div style="text-align: center;">
+							<h5>Electron Translation Speed </h5>
+							<input type="range" min="1" max="100" value="50" id="angular_translation_speed" style="width:300px;">
+							</div>
+						</td>
+				    <td style="padding-left:25px;">
+							<div style="text-align: center;">
+							<h5>Electron Rotation Speed </h5>
+							<input type="range" min="1" max="100" value="50" id="angular_rotation_speed" style="width:300px;">
+							</div>
+						</td>
+						<td style="padding-left:25px;">
+							<div style="text-align: center;">
+							<input id="play_button" type="submit" onclick="play()" value="Play"/>
+							</div>
+						</td>
+						<td style="padding-left:25px;">
+							<div style="text-align: center;">
+							<input id="axis_button" type="submit" onclick="showAxis()" value="Show Axis"/>
+							</div>
+						</td>
+				  </tr>
+				</table>
+				<div>
+				<script src="https://unpkg.com/three@0.116.1/build/three.js"></script>
+				<script src="https://unpkg.com/three@0.116.1/examples/js/controls/OrbitControls.js"></script>
 				<script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
 				<script src="http://unpkg.com/aframe-arrow-component/"></script>
-        <script  src="./script.js"></script>
+				<script  src="./script.js"></script>
+				</div>
 	</body>
 </html>
