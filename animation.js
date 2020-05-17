@@ -1,4 +1,4 @@
-
+var startTime = Date.now( ) * 0.0005;
 var height = 1;  // Distância default do elétron ao plano xy
 var r = 1.20688; // Raio de translação
 

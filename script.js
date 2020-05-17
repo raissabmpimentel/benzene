@@ -334,28 +334,26 @@ function moveElectron(electron, n, time, dir, s){
 
 // Desenhar animação
 var s = 0.05; // Rotação fixa para o spin dos eletrons
-var can_update = false;
-var showing_axis = false;
+var canUpdate = false;
+var showingAxis = false;
 
 function play(){
-  if(can_update == true){
-    can_update = false;
+  if(canUpdate == true){
+    canUpdate = false;
     document.getElementById('play_button').value = 'Play';
-    document.getElementById('play_button').style = "background-color: green;";
   } else{
-    can_update = true;
+    canUpdate = true;
     document.getElementById('play_button').value = 'Pause';
-    document.getElementById('play_button').style = "background-color: red;";
   }
 }
 
 function showAxis(){
-  if(showing_axis == true){
-    showing_axis = false;
+  if(showingAxis == true){
+    showingAxis = false;
     document.getElementById('axis_button').value = 'Show Axis';
     scene.remove(axesHelper);
   } else{
-    showing_axis = true;
+    showingAxis = true;
     document.getElementById('axis_button').value = 'Hide Axis';
     scene.add(axesHelper);
   }
@@ -365,7 +363,8 @@ function animate() {
     requestAnimationFrame(animate);
     var time = Date.now( ) * 0.0005;
 
-    if(can_update == true){
+    //console.log(canUpdate);
+    if(canUpdate == true){
       moveElectron(electron_up_1, 1, time, 1, s);
       moveElectron(electron_up_2, 2, time, 1, s);
       moveElectron(electron_up_3, 3, time, 1, s);

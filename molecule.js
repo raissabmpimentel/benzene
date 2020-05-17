@@ -18,13 +18,6 @@ var cylinderMesh = function( pointX, pointY )
     return edge;
 }
 
-// Iluminação
-var light = new THREE.AmbientLight(0x525252);
-scene.add(light);
-var light2 = new THREE.PointLight(0xffffff, 1, 100);
-light2.position.set(0, 0, 50);
-scene.add(light2);
-
 // Posicionamento dos átomos de C e H (adquiridos externamente), sua geometria e material
 var C_loc = {"x": [1.39359, -1.39359, 0.69680, -0.69680,  0.69680, -0.69680], "y": [0.00000, 0.00000, -1.20688, -1.20688, 1.20688, 1.20688]}
 var C_atoms = new THREE.Group();
@@ -51,21 +44,21 @@ for (i=0; i<C_loc.x.length; i++)
     H_mesh.position.set(H_loc.x[i],H_loc.y[i],0);
     H_atoms.add(H_mesh);
 
-    bondCH_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( H_loc.x[i], H_loc.y[i], 0 ));
+    bondCH_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(H_loc.x[i], H_loc.y[i], 0));
     bondsCH.add(bondCH_mesh);
 }
 
 // Adiciona as ligações entre carbnonos
 for (i=0; i<2; i++)
 {
-    bondCC_1_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( C_loc.x[i+2], C_loc.y[i+2], 0 ));
-    bondCC_2_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( C_loc.x[i+4], C_loc.y[i+4], 0 ));
+    bondCC_1_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(C_loc.x[i+2], C_loc.y[i+2], 0));
+    bondCC_2_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(C_loc.x[i+4], C_loc.y[i+4], 0));
     bondsCC.add(bondCC_1_mesh);
     bondsCC.add(bondCC_2_mesh);
 }
 
-bondCC_1_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[2], C_loc.y[2], 0 ), new THREE.Vector3( C_loc.x[3], C_loc.y[3], 0 ));
-bondCC_2_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[4], C_loc.y[4], 0 ), new THREE.Vector3( C_loc.x[5], C_loc.y[5], 0 ));
+bondCC_1_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[2], C_loc.y[2], 0), new THREE.Vector3( C_loc.x[3], C_loc.y[3], 0 ));
+bondCC_2_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[4], C_loc.y[4], 0), new THREE.Vector3( C_loc.x[5], C_loc.y[5], 0 ));
 bondsCC.add(bondCC_1_mesh);
 bondsCC.add(bondCC_2_mesh);
 
