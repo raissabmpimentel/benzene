@@ -23,3 +23,11 @@ var controls = new THREE.OrbitControls( camera, renderer.domElement );
 renderer.setClearColor("#ffffff"); // Cor do fundo
 renderer.setSize(window.innerWidth,(window.innerHeight - header.offsetHeight));
 document.body.appendChild(renderer.domElement);
+
+// Reajustar proporção com a mudança do tamanho da tela
+function onWindowResize() {
+    camera.aspect = window.innerWidth / (window.innerHeight - header.offsetHeight);
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, (window.innerHeight - header.offsetHeight));
+}
+window.addEventListener('resize', onWindowResize, false);
