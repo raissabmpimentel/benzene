@@ -1,7 +1,8 @@
 // Definição da cena, câmera (perspectiva) e renderizador
 
 var scene = new THREE.Scene(); 
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
+//var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
+var camera = new THREE.OrthographicCamera( window.innerWidth / - 250, window.innerWidth / 250, window.innerHeight / 250, window.innerHeight / - 250, 1, 1000 );
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
 alpha:true,
@@ -121,7 +122,11 @@ function animate() {
 
 // Reajustar proporção com a mudança do tamanho da tela
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    //camera.aspect = window.innerWidth / window.innerHeight;
+    camera.left = -window.innerWidth / 250;
+    camera.right = window.innerWidth / 250;
+    camera.top = window.innerHeight / 250;
+    camera.bottom = -window.innerHeight / 250;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
