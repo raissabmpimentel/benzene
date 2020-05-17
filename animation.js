@@ -100,6 +100,7 @@ function updateElectron(electron, n, time){
 var can_update = false; // responsável por pausar/rodar (false/true) a animação
 var showing_axis = false; // responsável por esconder/mostrar (false/true) o eixo xyz na cena
 
+// Atualizando o ângulo inicial dos elétron após uma pausa na animação
 function updateInitialAngle(){
   initial_angle_1 += wt;
   initial_angle_2 += wt;
@@ -109,16 +110,30 @@ function updateInitialAngle(){
   initial_angle_6 -= wt;
 }
 
+// Função invocada após o usuário clicar no botão play/pause
 function play(){
+  // Se a animação estivesse rodando, o click significa querer pausar a animação
   if(can_update == true){
+    // Atualiza o ângulo inicial dos elétrons para aquele que eles pararam
+    updateInitialAngle();
+
+    // Atualiza a cor e label do botão
     document.getElementById('play_button').value = 'Play';
     document.getElementById('play_button').style = "background-color: green;";
-    updateInitialAngle();
+
+    // Atualizaa variável de controle que pausa/roda a animação para pausá-la
     can_update = false;
-  } else{
+  }
+  // Se a animação não estivesse rodando, o click significa querer rodar a animação
+  else{
+    // Atualiza o tempo inicial da animação para o instante atual
     startTime = Date.now( ) * 0.0005;
+
+    // Atualiza a cor e label do botão
     document.getElementById('play_button').value = 'Pause';
     document.getElementById('play_button').style = "background-color: red;";
+
+    // Atualizaa variável de controle que pausa/roda a animação para roda-la
     can_update = true;
   }
 }
