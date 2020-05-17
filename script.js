@@ -1,9 +1,7 @@
 // Definição da cena, câmera (perspectiva) e renderizador
-var viewSize = 8;
-var aspectRatio = window.innerWidth / window.innerHeight;
+var startTime = Date.now( ) * 0.0005;
 var scene = new THREE.Scene();
-//var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-var camera = new THREE.OrthographicCamera(-aspectRatio * viewSize / 2, aspectRatio * viewSize / 2, viewSize / 2, -viewSize / 2, 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
 alpha:true,
@@ -116,7 +114,7 @@ scene.add(molecule);
 // Construcao dos eletrons
 // Geometria e material dos eletrons
 var e_geometry = new THREE.SphereGeometry(1, 32, 32);
-var e_material = new THREE.MeshStandardMaterial({color: 0xfd0000, metalness: 0.3, roughness: 0.5});
+var e_material = new THREE.MeshStandardMaterial({color: 0xd9d9d9, metalness: 0.3, roughness: 0.5});
 
 // Definir labels dos eletrons
 var e_labela1 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
@@ -212,6 +210,7 @@ e_labelb_pair.rotation.x = Math.PI/2;
 var from = new THREE.Vector3(0, 0, 0);
 var to = new THREE.Vector3(0, 0, 1);
 var direction = to.clone().sub(from);
+
 // Construir spins up
 var arrow_u1 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
 arrow_u1.setLength(2.2,1,0.5);
@@ -224,6 +223,7 @@ arrow_u3.setLength(2.2,1,0.5);
 
 var arrow_u_pair = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
 arrow_u_pair.setLength(2.2,1,0.5);
+
 // Construir spins down
 var arrow_d1 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
 arrow_d1.setLength(2.2,1,0.5);
@@ -328,7 +328,7 @@ electron_pair.add(electron_down_pair); // Adicionar eletron com spin down
 electron_pair.add(e_labela_pair);      // Adicionar label 1
 electron_pair.add(e_labelb_pair);      // Adicionar label 2
 
-//// TO DO: manipular diretamente os grupos para fazer a animacao e demais ajustes
+//// TO DO: manipular diretamente os grupos electron_pair para fazer a animacao e demais ajustes
 //// por exemplo:
 //// electron_pair.position.set()
 //// electron_pair.scale.set()
@@ -339,37 +339,67 @@ electron_pair.add(e_labelb_pair);      // Adicionar label 2
 //// eletrons up: electron_up_1, electron_up_2 e electron_up_3
 //// electrons down: electron_down_1, electron_down_2 e electron_down_3
 //// par de eletrons: electron_pair
+var height = 1;
 
-// Adicionar grupos de eletrons na cena
+function positioningAndScalingElectron(electron, up) {
+  electron.scale.set(0.05, 0.05, 0.05);
+  if(up == true){
+    electron.position.z = height;
+  } else {
+    electron.position.z = -height;
+  }
 
+  scene.add(electron);
+}
+
+
+// Adicionar eletrons na cena
+positioningAndScalingElectron(electron_down_1, false);
+positioningAndScalingElectron(electron_down_2, false);
+positioningAndScalingElectron(electron_down_3, false);
+
+positioningAndScalingElectron(electron_up_1, true);
+positioningAndScalingElectron(electron_up_2, true);
+positioningAndScalingElectron(electron_up_3, true);
+
+
+var w = 1; // angular speed
+var r = 1.20688; // radius
+
+function updatePosition(electron, n, time, dir) {
+  electron.position.x = r*Math.cos((1+4*(n-1))*Math.PI/6 + dir*w*(time - startTime));
+  electron.position.y = r*Math.sin((1+4*(n-1))*Math.PI/6 + dir*w*(time - startTime));
+}
+
+function updateRotation(electron, s) {
+    electron.rotation.z += s;
+}
+
+function moveElectron(electron, n, time, dir, s){
+  updatePosition(electron, n, time, dir);
+  updateRotation(electron, s);
+}
 
 // Desenhar animação
 var s = 0.05; // Rotação fixa para o spin dos eletrons
 function animate() {
     requestAnimationFrame(animate);
+    var time = Date.now( ) * 0.0005;
+    moveElectron(electron_up_1, 1, time, 1, s);
+    moveElectron(electron_up_2, 2, time, 1, s);
+    moveElectron(electron_up_3, 3, time, 1, s);
+    moveElectron(electron_down_1, 1, time, -1, s);
+    moveElectron(electron_down_2, 2, time, -1, s);
+    moveElectron(electron_down_3, 3, time, -1, s);
 
-    // Spin fixo dos eletrons
-    electron_up1.rotation.z += s;
-    electron_up2.rotation.z += s;
-    electron_up3.rotation.z += s;
-    electron_up_pair.rotation.z += s;
-    electron_down1.rotation.z += s;
-    electron_down2.rotation.z += s;
-    electron_down3.rotation.z += s;
-    electron_down_pair.rotation.z += s;
+controls.update();
+renderer.render(scene, camera);
 
-    controls.update();
-    renderer.render(scene, camera);
 }
 
 // Reajustar proporção com a mudança do tamanho da tela
 function onWindowResize() {
-    //camera.aspect = window.innerWidth / window.innerHeight;
-    var aspect = window.innerWidth / window.innerHeight;
-    camera.left = -aspect * viewSize / 2;
-    camera.right = aspect * viewSize  / 2;
-    camera.top = viewSize / 2;
-    camera.bottom = -viewSize / 2;
+    camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
