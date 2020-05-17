@@ -1,8 +1,8 @@
 // Definição da cena, câmera (perspectiva) e renderizador
 var viewSize = 8;
 var aspectRatio = window.innerWidth / window.innerHeight;
-var scene = new THREE.Scene(); 
-//var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
+var scene = new THREE.Scene();
+//var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 var camera = new THREE.OrthographicCamera(-aspectRatio * viewSize / 2, aspectRatio * viewSize / 2, viewSize / 2, -viewSize / 2, 0.1, 1000);
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
@@ -125,6 +125,14 @@ var e_labela2 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMater
 var e_labelb2 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var e_labela3 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var e_labelb3 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela4 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb4 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela5 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb5 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela6 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb6 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labela_pair = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+var e_labelb_pair = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var loader = new THREE.FontLoader();
 loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
 
@@ -141,6 +149,10 @@ loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.js
   e_labela1.geometry = geometry;
   e_labela2.geometry = geometry;
   e_labela3.geometry = geometry;
+  e_labela4.geometry = geometry;
+  e_labela5.geometry = geometry;
+  e_labela6.geometry = geometry;
+  e_labela_pair.geometry = geometry;
 
   var geometry = new THREE.TextGeometry( "-", {
     font : font,
@@ -155,22 +167,46 @@ loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.js
   e_labelb1.geometry = geometry;
   e_labelb2.geometry = geometry;
   e_labelb3.geometry = geometry;
+  e_labelb4.geometry = geometry;
+  e_labelb5.geometry = geometry;
+  e_labelb6.geometry = geometry;
+  e_labelb_pair.geometry = geometry;
 } );
 // Ajustar posicao dos labels
-e_labela1.position.set(2,0,1);
-e_labelb1.position.set(2+1.1,0,1.6);
+e_labela1.position.set(0.7,0,1);
+e_labelb1.position.set(1.8,0,1.6);
 e_labela1.rotation.x = Math.PI/2;
 e_labelb1.rotation.x = Math.PI/2;
 
-e_labela2.position.set(2,0,1);
-e_labelb2.position.set(2+1.1,0,1.6);
+e_labela2.position.set(0.7,0,1);
+e_labelb2.position.set(1.8,0,1.6);
 e_labela2.rotation.x = Math.PI/2;
 e_labelb2.rotation.x = Math.PI/2;
 
-e_labela3.position.set(2,0,1);
-e_labelb3.position.set(2+1.1,0,1.6);
+e_labela3.position.set(0.7,0,1);
+e_labelb3.position.set(1.8,0,1.6);
 e_labela3.rotation.x = Math.PI/2;
 e_labelb3.rotation.x = Math.PI/2;
+
+e_labela4.position.set(0.7,0,1);
+e_labelb4.position.set(1.8,0,1.6);
+e_labela4.rotation.x = Math.PI/2;
+e_labelb4.rotation.x = Math.PI/2;
+
+e_labela5.position.set(0.7,0,1);
+e_labelb5.position.set(1.8,0,1.6);
+e_labela5.rotation.x = Math.PI/2;
+e_labelb5.rotation.x = Math.PI/2;
+
+e_labela6.position.set(0.7,0,1);
+e_labelb6.position.set(1.8,0,1.6);
+e_labela6.rotation.x = Math.PI/2;
+e_labelb6.rotation.x = Math.PI/2;
+
+e_labela_pair.position.set(2,0,1);
+e_labelb_pair.position.set(3.1,0,1.6);
+e_labela_pair.rotation.x = Math.PI/2;
+e_labelb_pair.rotation.x = Math.PI/2;
 
 // Definir orientacao das setas de spin
 var from = new THREE.Vector3(0, 0, 0);
@@ -185,6 +221,9 @@ arrow_u2.setLength(2.2,1,0.5);
 
 var arrow_u3 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
 arrow_u3.setLength(2.2,1,0.5);
+
+var arrow_u_pair = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
+arrow_u_pair.setLength(2.2,1,0.5);
 // Construir spins down
 var arrow_d1 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
 arrow_d1.setLength(2.2,1,0.5);
@@ -195,10 +234,13 @@ arrow_d2.setLength(2.2,1,0.5);
 var arrow_d3 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
 arrow_d3.setLength(2.2,1,0.5);
 
+var arrow_d_pair = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
+arrow_d_pair.setLength(2.2,1,0.5);
+
 // Construir eletron base
 var electron = new THREE.Mesh(e_geometry, e_material);
 
-// Construir eletrons com spins definido
+// Construir eletrons com spins definidos
 var electron_up1 = new THREE.Mesh();
 var electron_down1 = new THREE.Mesh();
 
@@ -207,6 +249,10 @@ var electron_down2 = new THREE.Mesh();
 
 var electron_up3 = new THREE.Mesh();
 var electron_down3 = new THREE.Mesh();
+
+var electron_up_pair = new THREE.Mesh();
+var electron_down_pair = new THREE.Mesh();
+
 // Adicionar eletron e spin ao Mesh
 electron_up1.add(electron);
 electron_up1.add(arrow_u1);
@@ -229,64 +275,92 @@ electron_down3.add(electron.clone());
 electron_down3.add(arrow_d3);
 electron_down3.rotation.x = Math.PI; // Rotacionar para spin down
 
+electron_up_pair.add(electron.clone());
+electron_up_pair.add(arrow_u_pair);
+
+electron_down_pair.add(electron.clone());
+electron_down_pair.add(arrow_d_pair);
+electron_down_pair.rotation.x = Math.PI; // Rotacionar para spin down
+
 // Definir posicoes relativas entre eletrons
-electron_up1.position.set(1.3,0,0);
-electron_down1.position.set(-1.3,0,0);
-electron_up2.position.set(1.3,0,0);
-electron_down2.position.set(-1.3,0,0);
-electron_up3.position.set(1.3,0,0);
-electron_down3.position.set(-1.3,0,0);
+electron_up_pair.position.set(1.3,0,0);
+electron_down_pair.position.set(-1.3,0,0);
 
-// Grupos de pares de eletrons a serem animados
-var electron_pair1 = new THREE.Group();
-var electron_pair2 = new THREE.Group();
-var electron_pair3 = new THREE.Group();
-// Construir primeiro par
-electron_pair1.add(electron_up1);   // Adicionar eletron com spin up
-electron_pair1.add(electron_down1); // Adicionar eletron com spin down
-electron_pair1.add(e_labela1);      // Adicionar label 1
-electron_pair1.add(e_labelb1);      // Adicionar label 2
-// Construir segundo par
-electron_pair2.add(electron_up2);
-electron_pair2.add(electron_down2);
-electron_pair2.add(e_labela2);
-electron_pair2.add(e_labelb2);
-// Construir terceiro par
-electron_pair3.add(electron_up3);
-electron_pair3.add(electron_down3);
-electron_pair3.add(e_labela3);
-electron_pair3.add(e_labelb3);
+//Grupo de eletrons a serem animados
+electron_up_1 = new THREE.Group();
+electron_up_2 = new THREE.Group();
+electron_up_3 = new THREE.Group();
+electron_down_1 = new THREE.Group();
+electron_down_2 = new THREE.Group();
+electron_down_3 = new THREE.Group();
 
-//// TO DO: manipular diretamente os grupos electron_pair para fazer a animacao e demais ajustes
+// Construir grupos de eletrons
+electron_up_1.add(electron_up1);
+electron_up_1.add(e_labela1);
+electron_up_1.add(e_labelb1);
+
+electron_up_2.add(electron_up2);
+electron_up_2.add(e_labela2);
+electron_up_2.add(e_labelb2);
+
+electron_up_3.add(electron_up3);
+electron_up_3.add(e_labela3);
+electron_up_3.add(e_labelb3);
+
+electron_down_1.add(electron_down1);
+electron_down_1.add(e_labela4);
+electron_down_1.add(e_labelb4);
+
+electron_down_2.add(electron_down2);
+electron_down_2.add(e_labela5);
+electron_down_2.add(e_labelb5);
+
+electron_down_3.add(electron_down3);
+electron_down_3.add(e_labela6);
+electron_down_3.add(e_labelb6);
+
+// Grupo de par de eletrons a ser animado
+var electron_pair = new THREE.Group();
+
+// Construir grupo do par de eletrons
+electron_pair.add(electron_up_pair);   // Adicionar eletron com spin up
+electron_pair.add(electron_down_pair); // Adicionar eletron com spin down
+electron_pair.add(e_labela_pair);      // Adicionar label 1
+electron_pair.add(e_labelb_pair);      // Adicionar label 2
+
+//// TO DO: manipular diretamente os grupos para fazer a animacao e demais ajustes
 //// por exemplo:
-//// electron_pair#.position.set()
-//// electron_pair#.scale.set()
-//// electron_pair#.position.x =
-//// electron_pair#.rotation.x =
+//// electron_pair.position.set()
+//// electron_pair.scale.set()
+//// electron_pair.position.x =
+//// electron_pair.rotation.x =
 
-electron_pair1.scale.set(1/8,1/8,1/8);
-electron_pair1.position.set(0,0,2);
+//// RESUMO DOS GRUPOS
+//// eletrons up: electron_up_1, electron_up_2 e electron_up_3
+//// electrons down: electron_down_1, electron_down_2 e electron_down_3
+//// par de eletrons: electron_pair
 
-// Adicionar pares de eletrons na cena
-scene.add(electron_pair1);
+// Adicionar grupos de eletrons na cena
+
 
 // Desenhar animação
 var s = 0.05; // Rotação fixa para o spin dos eletrons
 function animate() {
     requestAnimationFrame(animate);
 
-    // Spin dos eletrons independente do movimento do par
+    // Spin fixo dos eletrons
     electron_up1.rotation.z += s;
-    electron_down1.rotation.z += s;
     electron_up2.rotation.z += s;
-    electron_down2.rotation.z += s;
     electron_up3.rotation.z += s;
+    electron_up_pair.rotation.z += s;
+    electron_down1.rotation.z += s;
+    electron_down2.rotation.z += s;
     electron_down3.rotation.z += s;
+    electron_down_pair.rotation.z += s;
 
     controls.update();
     renderer.render(scene, camera);
 }
-
 
 // Reajustar proporção com a mudança do tamanho da tela
 function onWindowResize() {
