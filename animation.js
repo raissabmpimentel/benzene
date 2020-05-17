@@ -85,9 +85,9 @@ function animate() {
 
 // Reajustar proporção com a mudança do tamanho da tela
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth / (window.innerHeight - header.offsetHeight);
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, (window.innerHeight - header.offsetHeight));
 }
 window.addEventListener('resize', onWindowResize, false);
 
