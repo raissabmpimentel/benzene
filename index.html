@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-        <title>Benzene - CCI-36</title>
+        <title>Benzene 3D Model</title>
         <link rel="stylesheet" href="./style.css">
 	</head>
 	<body>
@@ -23,12 +23,12 @@
 						</td>
 						<td style="padding-left:25px;">
 							<div style="text-align: center;">
-							<input id="play_button" type="submit" onclick="play()" value="Play"/>
+							<input id="play_button" type="submit" onclick="play()" value="Play" class="button"/>
 							</div>
 						</td>
 						<td style="padding-left:25px;">
 							<div style="text-align: center;">
-							<input id="axis_button" type="submit" onclick="showAxis()" value="Show Axis"/>
+							<input id="axis_button" type="submit" onclick="showAxis()" value="Show Axis" class="button" style="background-color:#4863A0;"/>
 							</div>
 						</td>
 				  </tr>
@@ -38,7 +38,10 @@
 				<script src="https://unpkg.com/three@0.116.1/examples/js/controls/OrbitControls.js"></script>
 				<script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
 				<script src="http://unpkg.com/aframe-arrow-component/"></script>
-				<script  src="./script.js"></script>
+				<script  src="./setup.js"></script>
+				<script  src="./molecule.js"></script>
+				<script  src="./electron.js"></script>
+				<script  src="./animation.js"></script>
 				</div>
 	</body>
 </html>
