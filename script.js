@@ -117,6 +117,10 @@ var e_geometry = new THREE.SphereGeometry(1, 32, 32);
 var e_material = new THREE.MeshStandardMaterial({color: 0xd9d9d9, metalness: 0.3, roughness: 0.5});
 
 // Definir labels dos eletrons
+function createElectronLabel(e_labela, e_labelb) {
+  var e_labela = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
+}
+
 var e_labela1 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var e_labelb1 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var e_labela2 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
@@ -170,36 +174,22 @@ loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.js
   e_labelb6.geometry = geometry;
   e_labelb_pair.geometry = geometry;
 } );
+
 // Ajustar posicao dos labels
-e_labela1.position.set(0.7,0,1);
-e_labelb1.position.set(1.8,0,1.6);
-e_labela1.rotation.x = Math.PI/2;
-e_labelb1.rotation.x = Math.PI/2;
+function positioningElectronLabel(e_labela, e_labelb) {
+  e_labela.position.set(0.7,0,1);
+  e_labela.rotation.x = Math.PI/2;
 
-e_labela2.position.set(0.7,0,1);
-e_labelb2.position.set(1.8,0,1.6);
-e_labela2.rotation.x = Math.PI/2;
-e_labelb2.rotation.x = Math.PI/2;
+  e_labelb.position.set(1.8,0,1.6);
+  e_labelb.rotation.x = Math.PI/2;
+}
 
-e_labela3.position.set(0.7,0,1);
-e_labelb3.position.set(1.8,0,1.6);
-e_labela3.rotation.x = Math.PI/2;
-e_labelb3.rotation.x = Math.PI/2;
-
-e_labela4.position.set(0.7,0,1);
-e_labelb4.position.set(1.8,0,1.6);
-e_labela4.rotation.x = Math.PI/2;
-e_labelb4.rotation.x = Math.PI/2;
-
-e_labela5.position.set(0.7,0,1);
-e_labelb5.position.set(1.8,0,1.6);
-e_labela5.rotation.x = Math.PI/2;
-e_labelb5.rotation.x = Math.PI/2;
-
-e_labela6.position.set(0.7,0,1);
-e_labelb6.position.set(1.8,0,1.6);
-e_labela6.rotation.x = Math.PI/2;
-e_labelb6.rotation.x = Math.PI/2;
+positioningElectronLabel(e_labela1, e_labelb1);
+positioningElectronLabel(e_labela2, e_labelb2);
+positioningElectronLabel(e_labela3, e_labelb3);
+positioningElectronLabel(e_labela4, e_labelb4);
+positioningElectronLabel(e_labela5, e_labelb5);
+positioningElectronLabel(e_labela6, e_labelb6);
 
 e_labela_pair.position.set(2,0,1);
 e_labelb_pair.position.set(3.1,0,1.6);
@@ -254,26 +244,21 @@ var electron_up_pair = new THREE.Mesh();
 var electron_down_pair = new THREE.Mesh();
 
 // Adicionar eletron e spin ao Mesh
-electron_up1.add(electron);
-electron_up1.add(arrow_u1);
+function creatingElectronWithSpin(electron_with_spin, electron, arrow, down) {
+  electron_with_spin.add(electron.clone());
+  electron_with_spin.add(arrow);
+  if(down == true){
+    electron_with_spin.rotation.x = Math.PI; // Rotacionar para spin down
+  }
+}
 
-electron_down1.add(electron.clone());
-electron_down1.add(arrow_d1);
-electron_down1.rotation.x = Math.PI; // Rotacionar para spin down
+creatingElectronWithSpin(electron_up1, electron, arrow_u1, false);
+creatingElectronWithSpin(electron_up2, electron, arrow_u2, false);
+creatingElectronWithSpin(electron_up3, electron, arrow_u3, false);
 
-electron_up2.add(electron.clone());
-electron_up2.add(arrow_u2);
-
-electron_down2.add(electron.clone());
-electron_down2.add(arrow_d2);
-electron_down2.rotation.x = Math.PI; // Rotacionar para spin down
-
-electron_up3.add(electron.clone());
-electron_up3.add(arrow_u3);
-
-electron_down3.add(electron.clone());
-electron_down3.add(arrow_d3);
-electron_down3.rotation.x = Math.PI; // Rotacionar para spin down
+creatingElectronWithSpin(electron_down1, electron, arrow_d1, true);
+creatingElectronWithSpin(electron_down2, electron, arrow_d2, true);
+creatingElectronWithSpin(electron_down3, electron, arrow_d3, true);
 
 electron_up_pair.add(electron.clone());
 electron_up_pair.add(arrow_u_pair);
@@ -295,29 +280,19 @@ electron_down_2 = new THREE.Group();
 electron_down_3 = new THREE.Group();
 
 // Construir grupos de eletrons
-electron_up_1.add(electron_up1);
-electron_up_1.add(e_labela1);
-electron_up_1.add(e_labelb1);
+function creatingElectron(electron_set, electron_with_spin, e_labela, e_labelb) {
+  electron_set.add(electron_with_spin);
+  electron_set.add(e_labela);
+  electron_set.add(e_labelb);
+}
 
-electron_up_2.add(electron_up2);
-electron_up_2.add(e_labela2);
-electron_up_2.add(e_labelb2);
+creatingElectron(electron_up_1, electron_up1, e_labela1, e_labelb1);
+creatingElectron(electron_up_2, electron_up2, e_labela2, e_labelb2);
+creatingElectron(electron_up_3, electron_up3, e_labela3, e_labelb3);
+creatingElectron(electron_down_1, electron_down1, e_labela4, e_labelb4);
+creatingElectron(electron_down_2, electron_down2, e_labela5, e_labelb5);
+creatingElectron(electron_down_3, electron_down3, e_labela6, e_labelb6);
 
-electron_up_3.add(electron_up3);
-electron_up_3.add(e_labela3);
-electron_up_3.add(e_labelb3);
-
-electron_down_1.add(electron_down1);
-electron_down_1.add(e_labela4);
-electron_down_1.add(e_labelb4);
-
-electron_down_2.add(electron_down2);
-electron_down_2.add(e_labela5);
-electron_down_2.add(e_labelb5);
-
-electron_down_3.add(electron_down3);
-electron_down_3.add(e_labela6);
-electron_down_3.add(e_labelb6);
 
 // Grupo de par de eletrons a ser animado
 var electron_pair = new THREE.Group();
@@ -328,17 +303,6 @@ electron_pair.add(electron_down_pair); // Adicionar eletron com spin down
 electron_pair.add(e_labela_pair);      // Adicionar label 1
 electron_pair.add(e_labelb_pair);      // Adicionar label 2
 
-//// TO DO: manipular diretamente os grupos electron_pair para fazer a animacao e demais ajustes
-//// por exemplo:
-//// electron_pair.position.set()
-//// electron_pair.scale.set()
-//// electron_pair.position.x =
-//// electron_pair.rotation.x =
-
-//// RESUMO DOS GRUPOS
-//// eletrons up: electron_up_1, electron_up_2 e electron_up_3
-//// electrons down: electron_down_1, electron_down_2 e electron_down_3
-//// par de eletrons: electron_pair
 var height = 1;
 
 function positioningAndScalingElectron(electron, up) {
@@ -354,14 +318,12 @@ function positioningAndScalingElectron(electron, up) {
 
 
 // Adicionar eletrons na cena
-positioningAndScalingElectron(electron_down_1, false);
-positioningAndScalingElectron(electron_down_2, false);
-positioningAndScalingElectron(electron_down_3, false);
-
 positioningAndScalingElectron(electron_up_1, true);
 positioningAndScalingElectron(electron_up_2, true);
 positioningAndScalingElectron(electron_up_3, true);
-
+positioningAndScalingElectron(electron_down_1, false);
+positioningAndScalingElectron(electron_down_2, false);
+positioningAndScalingElectron(electron_down_3, false);
 
 var w = 1; // angular speed
 var r = 1.20688; // radius
