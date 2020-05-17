@@ -23,33 +23,75 @@ positioningAndScalingElectron(electron_down_1, 1, false);
 positioningAndScalingElectron(electron_down_2, 2, false);
 positioningAndScalingElectron(electron_down_3, 3, false);
 
-function updatePosition(electron, n, time, dir) {
-  electron.position.x = r*Math.cos((1+4*(n-1))*Math.PI/6 + dir*parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime));
-  electron.position.y = r*Math.sin((1+4*(n-1))*Math.PI/6 + dir*parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime));
+var initial_angle_1 = Math.PI/6;
+var initial_angle_2 = 5*Math.PI/6;
+var initial_angle_3 = 3*Math.PI/2;
+
+var initial_angle_4 = Math.PI/6;
+var initial_angle_5 = 5*Math.PI/6;
+var initial_angle_6 = 3*Math.PI/2;
+var wt = 0;
+
+function updatePosition(electron, n, time) {
+  wt = parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime);
+  if(n == 1){
+    electron.position.x = r*Math.cos(initial_angle_1 + wt);
+    electron.position.y = r*Math.sin(initial_angle_1 + wt);
+  } else if(n == 2){
+    electron.position.x = r*Math.cos(initial_angle_2 + wt);
+    electron.position.y = r*Math.sin(initial_angle_2 + wt);
+  } else if(n==3){
+    electron.position.x = r*Math.cos(initial_angle_3 + wt);
+    electron.position.y = r*Math.sin(initial_angle_3 + wt);
+  } else if(n==4){
+    electron.position.x = r*Math.cos(initial_angle_4 - wt);
+    electron.position.y = r*Math.sin(initial_angle_4 - wt);
+  } else if(n==5){
+    electron.position.x = r*Math.cos(initial_angle_5 - wt);
+    electron.position.y = r*Math.sin(initial_angle_5 - wt);
+  } else{
+    electron.position.x = r*Math.cos(initial_angle_6 - wt);
+    electron.position.y = r*Math.sin(initial_angle_6 - wt);
+  }
 }
 
-function updateRotation(electron) {
-    electron.rotation.z += parseFloat(document.getElementById("angular_rotation_speed").value)*0.002;
+function updateRotation(electron, dir) {
+    electron.rotation.z += dir*parseFloat(document.getElementById("angular_rotation_speed").value)*0.002;
 }
 
 function moveElectron(electron, n, time, dir, s){
   updatePosition(electron, n, time, dir);
-  updateRotation(electron, s);
+  if(n<= 3){
+    updateRotation(electron, 1);
+  } else{
+    updateRotation(electron, -1);
+  }
 }
 
 // Desenhar animação
 var can_update = false;
 var showing_axis = false;
 
+function updateInitialAngle(){
+  initial_angle_1 += wt;
+  initial_angle_2 += wt;
+  initial_angle_3 += wt;
+  initial_angle_4 -= wt;
+  initial_angle_5 -= wt;
+  initial_angle_6 -= wt;
+}
+
 function play(){
   if(can_update == true){
-    can_update = false;
     document.getElementById('play_button').value = 'Play';
     document.getElementById('play_button').style = "background-color: green;";
+    updateInitialAngle();
+    can_update = false;
   } else{
-    can_update = true;
+    startTime = Date.now( ) * 0.0005;
     document.getElementById('play_button').value = 'Pause';
     document.getElementById('play_button').style = "background-color: red;";
+    can_update = true;
   }
 }
 
@@ -70,13 +112,13 @@ function animate() {
     var time = Date.now( ) * 0.0005;
 
     if(can_update == true){
-      moveElectron(electron_up_1, 1, time, 1);
-      moveElectron(electron_up_2, 2, time, 1);
-      moveElectron(electron_up_3, 3, time, 1);
+      moveElectron(electron_up_1, 1, time);
+      moveElectron(electron_up_2, 2, time);
+      moveElectron(electron_up_3, 3, time);
 
-      moveElectron(electron_down_1, 1, time, -1);
-      moveElectron(electron_down_2, 2, time, -1);
-      moveElectron(electron_down_3, 3, time, -1);
+      moveElectron(electron_down_1, 4, time);
+      moveElectron(electron_down_2, 5, time);
+      moveElectron(electron_down_3, 6, time);
     }
 
     controls.update();
