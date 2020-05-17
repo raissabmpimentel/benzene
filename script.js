@@ -8,14 +8,11 @@ alpha:true,
 antialias:true
 });
 
-//////////////////// PARA AJUDAR VISUALIZAÇÃO, TIRAR DEPOIS ////////////////////
 var axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
-///////////////////////////////////////////////////////////////////////////////
 
 // Posicionar camera
 camera.up.set(0,0,1);
-camera.position.set(0,0,5);
+camera.position.set(0,0,7);
 camera.lookAt(0,0,0);
 
 // Controle da câmera
@@ -297,9 +294,12 @@ electron_pair.add(e_labela_pair);      // Adicionar label 1
 electron_pair.add(e_labelb_pair);      // Adicionar label 2*/
 
 var height = 1;
+var r = 1.20688; // radius
 
-function positioningAndScalingElectron(electron, up) {
+function positioningAndScalingElectron(electron, n, up) {
   electron.scale.set(0.05, 0.05, 0.05);
+  electron.position.x = r*Math.cos((1+4*(n-1))*Math.PI/6);
+  electron.position.y = r*Math.sin((1+4*(n-1))*Math.PI/6);
   if(up == true){
     electron.position.z = height;
   } else {
@@ -310,24 +310,21 @@ function positioningAndScalingElectron(electron, up) {
 }
 
 // Adicionar eletrons na cena
-positioningAndScalingElectron(electron_up_1, true);
-positioningAndScalingElectron(electron_up_2, true);
-positioningAndScalingElectron(electron_up_3, true);
+positioningAndScalingElectron(electron_up_1, 1, true);
+positioningAndScalingElectron(electron_up_2, 2, true);
+positioningAndScalingElectron(electron_up_3, 3, true);
 
-positioningAndScalingElectron(electron_down_1, false);
-positioningAndScalingElectron(electron_down_2, false);
-positioningAndScalingElectron(electron_down_3, false);
-
-var w = 1; // angular speed
-var r = 1.20688; // radius
+positioningAndScalingElectron(electron_down_1, 1, false);
+positioningAndScalingElectron(electron_down_2, 2, false);
+positioningAndScalingElectron(electron_down_3, 3, false);
 
 function updatePosition(electron, n, time, dir) {
-  electron.position.x = r*Math.cos((1+4*(n-1))*Math.PI/6 + dir*w*(time - startTime));
-  electron.position.y = r*Math.sin((1+4*(n-1))*Math.PI/6 + dir*w*(time - startTime));
+  electron.position.x = r*Math.cos((1+4*(n-1))*Math.PI/6 + dir*parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime));
+  electron.position.y = r*Math.sin((1+4*(n-1))*Math.PI/6 + dir*parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime));
 }
 
 function updateRotation(electron, s) {
-    electron.rotation.z += s;
+    electron.rotation.z += parseFloat(document.getElementById("angular_rotation_speed").value)*0.002;
 }
 
 function moveElectron(electron, n, time, dir, s){
@@ -337,17 +334,45 @@ function moveElectron(electron, n, time, dir, s){
 
 // Desenhar animação
 var s = 0.05; // Rotação fixa para o spin dos eletrons
+var canUpdate = false;
+var showingAxis = false;
+
+function play(){
+  if(canUpdate == true){
+    canUpdate = false;
+    document.getElementById('play_button').value = 'Play';
+  } else{
+    canUpdate = true;
+    document.getElementById('play_button').value = 'Pause';
+  }
+}
+
+function showAxis(){
+  if(showingAxis == true){
+    showingAxis = false;
+    document.getElementById('axis_button').value = 'Show Axis';
+    scene.remove(axesHelper);
+  } else{
+    showingAxis = true;
+    document.getElementById('axis_button').value = 'Hide Axis';
+    scene.add(axesHelper);
+  }
+}
+
 function animate() {
     requestAnimationFrame(animate);
     var time = Date.now( ) * 0.0005;
 
-    moveElectron(electron_up_1, 1, time, 1, s);
-    moveElectron(electron_up_2, 2, time, 1, s);
-    moveElectron(electron_up_3, 3, time, 1, s);
+    //console.log(canUpdate);
+    if(canUpdate == true){
+      moveElectron(electron_up_1, 1, time, 1, s);
+      moveElectron(electron_up_2, 2, time, 1, s);
+      moveElectron(electron_up_3, 3, time, 1, s);
 
-    moveElectron(electron_down_1, 1, time, -1, s);
-    moveElectron(electron_down_2, 2, time, -1, s);
-    moveElectron(electron_down_3, 3, time, -1, s);
+      moveElectron(electron_down_1, 1, time, -1, s);
+      moveElectron(electron_down_2, 2, time, -1, s);
+      moveElectron(electron_down_3, 3, time, -1, s);
+    }
 
     controls.update();
     renderer.render(scene, camera);
