@@ -1,5 +1,5 @@
 // Definição da cena, câmera (perspectiva) e renderizador
-var startTime = Date.now( ) * 0.0005;
+
 var scene = new THREE.Scene();
 var header = document.getElementById("controllers");
 var camera = new THREE.PerspectiveCamera(25, window.innerWidth / (window.innerHeight - header.offsetHeight), 0.1, 1000);

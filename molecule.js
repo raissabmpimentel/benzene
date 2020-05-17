@@ -44,21 +44,21 @@ for (i=0; i<C_loc.x.length; i++)
     H_mesh.position.set(H_loc.x[i],H_loc.y[i],0);
     H_atoms.add(H_mesh);
 
-    bondCH_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( H_loc.x[i], H_loc.y[i], 0 ));
+    bondCH_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(H_loc.x[i], H_loc.y[i], 0));
     bondsCH.add(bondCH_mesh);
 }
 
 // Adiciona as ligações entre carbnonos
 for (i=0; i<2; i++)
 {
-    bondCC_1_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( C_loc.x[i+2], C_loc.y[i+2], 0 ));
-    bondCC_2_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[i], C_loc.y[i], 0 ), new THREE.Vector3( C_loc.x[i+4], C_loc.y[i+4], 0 ));
+    bondCC_1_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(C_loc.x[i+2], C_loc.y[i+2], 0));
+    bondCC_2_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[i], C_loc.y[i], 0), new THREE.Vector3(C_loc.x[i+4], C_loc.y[i+4], 0));
     bondsCC.add(bondCC_1_mesh);
     bondsCC.add(bondCC_2_mesh);
 }
 
-bondCC_1_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[2], C_loc.y[2], 0 ), new THREE.Vector3( C_loc.x[3], C_loc.y[3], 0 ));
-bondCC_2_mesh = cylinderMesh(new THREE.Vector3( C_loc.x[4], C_loc.y[4], 0 ), new THREE.Vector3( C_loc.x[5], C_loc.y[5], 0 ));
+bondCC_1_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[2], C_loc.y[2], 0), new THREE.Vector3( C_loc.x[3], C_loc.y[3], 0 ));
+bondCC_2_mesh = cylinderMesh(new THREE.Vector3(C_loc.x[4], C_loc.y[4], 0), new THREE.Vector3( C_loc.x[5], C_loc.y[5], 0 ));
 bondsCC.add(bondCC_1_mesh);
 bondsCC.add(bondCC_2_mesh);
 
