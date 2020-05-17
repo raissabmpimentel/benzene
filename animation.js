@@ -33,7 +33,7 @@ var initial_angle_6 = 3*Math.PI/2;
 var wt = 0;
 
 function updatePosition(electron, n, time) {
-  wt = parseFloat(document.getElementById("angular_translation_speed").value)*0.04*(time - startTime);
+  wt = w_tran*0.04*(time - startTime);
   if(n == 1){
     electron.position.x = r*Math.cos(initial_angle_1 + wt);
     electron.position.y = r*Math.sin(initial_angle_1 + wt);
@@ -56,11 +56,11 @@ function updatePosition(electron, n, time) {
 }
 
 function updateRotation(electron, dir) {
-    electron.rotation.z += dir*parseFloat(document.getElementById("angular_rotation_speed").value)*0.002;
+    electron.rotation.z += dir*w_rot*0.002;
 }
 
-function moveElectron(electron, n, time, dir, s){
-  updatePosition(electron, n, time, dir);
+function moveElectron(electron, n, time){
+  updatePosition(electron, n, time);
   if(n<= 3){
     updateRotation(electron, 1);
   } else{
@@ -71,6 +71,8 @@ function moveElectron(electron, n, time, dir, s){
 // Desenhar animação
 var can_update = false;
 var showing_axis = false;
+var w_rot = parseFloat(document.getElementById("angular_rotation_speed").value);
+var w_tran = parseFloat(document.getElementById("angular_translation_speed").value);
 
 function updateInitialAngle(){
   initial_angle_1 += wt;
@@ -112,6 +114,9 @@ function animate() {
     var time = Date.now( ) * 0.0005;
 
     if(can_update == true){
+      w_rot = parseFloat(document.getElementById("angular_rotation_speed").value);
+      w_tran = parseFloat(document.getElementById("angular_translation_speed").value);
+
       moveElectron(electron_up_1, 1, time);
       moveElectron(electron_up_2, 2, time);
       moveElectron(electron_up_3, 3, time);
