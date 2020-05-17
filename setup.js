@@ -9,6 +9,13 @@ alpha:true,
 antialias:true
 });
 
+// Iluminação
+var light = new THREE.AmbientLight(0x525252);
+scene.add(light);
+var light2 = new THREE.PointLight(0xffffff, 1, 100);
+light2.position.set(0, 0, 50);
+scene.add(light2);
+
 var axesHelper = new THREE.AxesHelper(4);
 
 // Posicionar camera
@@ -23,3 +30,11 @@ var controls = new THREE.OrbitControls( camera, renderer.domElement );
 renderer.setClearColor("#ffffff"); // Cor do fundo
 renderer.setSize(window.innerWidth,(window.innerHeight - header.offsetHeight));
 document.body.appendChild(renderer.domElement);
+
+// Reajustar proporção com a mudança do tamanho da tela
+function onWindowResize() {
+    camera.aspect = window.innerWidth / (window.innerHeight - header.offsetHeight);
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, (window.innerHeight - header.offsetHeight));
+}
+window.addEventListener('resize', onWindowResize, false);

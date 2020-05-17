@@ -18,13 +18,6 @@ var cylinderMesh = function( pointX, pointY )
     return edge;
 }
 
-// Iluminação
-var light = new THREE.AmbientLight(0x525252);
-scene.add(light);
-var light2 = new THREE.PointLight(0xffffff, 1, 100);
-light2.position.set(0, 0, 50);
-scene.add(light2);
-
 // Posicionamento dos átomos de C e H (adquiridos externamente), sua geometria e material
 var C_loc = {"x": [1.39359, -1.39359, 0.69680, -0.69680,  0.69680, -0.69680], "y": [0.00000, 0.00000, -1.20688, -1.20688, 1.20688, 1.20688]}
 var C_atoms = new THREE.Group();
