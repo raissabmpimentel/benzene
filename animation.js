@@ -1,14 +1,31 @@
 var height = 1;  // Distância default do elétron ao plano xy
 var r = 1.20688; // Raio de translação
 
+// Variáveis que armazenam o ângulo inicial de cada elétron
+var initial_angle_1 = Math.PI/6;
+var initial_angle_2 = 5*Math.PI/6;
+var initial_angle_3 = 3*Math.PI/2;
+var initial_angle_4 = Math.PI/6;
+var initial_angle_5 = 5*Math.PI/6;
+var initial_angle_6 = 3*Math.PI/2;
+
 // Redimencionando o tamanho do elétron e setando sua posição inicial
 function positioningAndScalingElectron(electron, id) {
   // Redimencionando o tamanho do elétron
   electron.scale.set(0.05, 0.05, 0.05);
 
   // Setando a posição inicial do elétron de acordo com sua identificação
-  electron.position.x = r*Math.cos((1+4*((id%3)-1))*Math.PI/6);
-  electron.position.y = r*Math.sin((1+4*((id%3)-1))*Math.PI/6);
+  if(id%3 == 1){
+    electron.position.x = r*Math.cos(initial_angle_1);
+    electron.position.y = r*Math.sin(initial_angle_1);
+  } else if(id%3 == 2){
+    electron.position.x = r*Math.cos(initial_angle_2);
+    electron.position.y = r*Math.sin(initial_angle_2);
+  } else {
+    electron.position.x = r*Math.cos(initial_angle_3);
+    electron.position.y = r*Math.sin(initial_angle_3);
+  }
+
   if(id <= 3){
     electron.position.z = height;
   } else {
@@ -26,24 +43,15 @@ positioningAndScalingElectron(electron_down_1, 4);
 positioningAndScalingElectron(electron_down_2, 5);
 positioningAndScalingElectron(electron_down_3, 6);
 
-
-// Variáveis que armazenam o ângulo inicial de cada elétron
-var initial_angle_1 = Math.PI/6;
-var initial_angle_2 = 5*Math.PI/6;
-var initial_angle_3 = 3*Math.PI/2;
-var initial_angle_4 = Math.PI/6;
-var initial_angle_5 = 5*Math.PI/6;
-var initial_angle_6 = 3*Math.PI/2;
-
 var wt = 0; // contribuição angular do movimento
-
-// Variável que armazena a velocidade angular de rotação do elétron,
-// a qual é controlada pelo usuário
-var w_rot = parseFloat(document.getElementById("angular_rotation_speed").value);
 
 // Variável que armazena a velocidade angular de translação do elétron,
 // a qual é controlada pelo usuário
 var w_tran = parseFloat(document.getElementById("angular_translation_speed").value);
+
+var orientation = 1; // armazena o sentido do movimento naquele instante
+
+var tolerance = 0.01; // utilizada na análise da restrição do movimento dos elétrons
 
 // Atualizando a posição (x, y) do elétron de acordo com o movimento
 // de translação que ocorre no tempo
@@ -51,7 +59,7 @@ function updatePosition(electron, n, time) {
   // Computando a contribuição angular no movimento de translação do elétron
   // ocasionada pelo intervalo pelo de tempo que passou desde que a animação
   // foi iniciada (desde o play)
-  wt = w_tran*0.04*(time - startTime);  // dAng = w*dT
+  wt = orientation*w_tran*0.04*(time - startTime);  // dAng = w*dT
 
   // Se a animação for pausada, o ângulo inicial do movimento de cada
   // elétron é atualizado, portanto, é preciso computar o ângulo de
@@ -59,6 +67,29 @@ function updatePosition(electron, n, time) {
   var angle;
   if(n == 1){
     angle = initial_angle_1 + wt;
+
+    // Limitando o movimento do elétron a um percurso de 60º em torno
+    // da sua posição inicial
+    if(angle > Math.PI/2 + tolerance || angle < Math.PI/6 - tolerance){
+      orientation *= -1;
+      startTime = Date.now( ) * 0.0005;
+      if(angle > Math.PI/2){
+        initial_angle_1 = Math.PI/2;
+        initial_angle_2 = 7*Math.PI/6;
+        initial_angle_3 = 11*Math.PI/6;
+        initial_angle_4 = -Math.PI/6;
+        initial_angle_5 = 3*Math.PI/6;
+        initial_angle_6 = 7*Math.PI/6;
+      } else{
+        initial_angle_1 = Math.PI/6;
+        initial_angle_2 = 5*Math.PI/6;
+        initial_angle_3 = 3*Math.PI/2;
+        initial_angle_4 = Math.PI/6;
+        initial_angle_5 = 5*Math.PI/6;
+        initial_angle_6 = 3*Math.PI/2;
+      }
+      //console.log('entrou');
+    }
   } else if(n == 2){
     angle = initial_angle_2 + wt;
   } else if(n == 3){
@@ -76,12 +107,16 @@ function updatePosition(electron, n, time) {
   electron.position.y = r*Math.sin(angle);
 }
 
+// Variável que armazena a velocidade angular de rotação do elétron,
+// a qual é controlada pelo usuário
+var w_rot = parseFloat(document.getElementById("angular_rotation_speed").value);
+
 // Atualizando a rotação do elétron em torno do seu eixo z, de acordo com a
 // velocidade de rotação setada pelo usuário (w_rot); e utilizando a regra da
-// mão direita (dir), isto é, elétrons com spin up giram em sentido
+// mão direita (orientation), isto é, elétrons com spin up giram em sentido
 // anti-horário e elétrons com spin down giram em sentido horário
-function updateRotation(electron, dir) {
-    electron.rotation.z += dir*w_rot*0.002;
+function updateRotation(electron, orientation) {
+    electron.rotation.z += orientation*w_rot*0.002;
 }
 
 // Transladando e rotacionando o elétron
@@ -95,9 +130,8 @@ function updateElectron(electron, n, time){
   }
 }
 
-// Inicialização das variáveis de controle
-var can_update = false; // responsável por pausar/rodar (false/true) a animação
-var showing_axis = false; // responsável por esconder/mostrar (false/true) o eixo xyz na cena
+var can_update = false; // variável de controle responsável por pausar/rodar
+                        // (false/true) a animação
 
 // Atualizando o ângulo inicial dos elétron após uma pausa na animação
 function updateInitialAngle(){
@@ -175,6 +209,12 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+// Invoca o loop da animação
+animate();
+
+var showing_axis = false; // variável de controle responsável por esconder/mostrar
+                          // (false/true) o eixo xyz na cena
+
 // Função responsável por inserir o eixo xyz na cena, caso o usuário deseje
 function showAxis(){
   // Se o eixo estiver na cena, o click significa querer removê-lo da cena
@@ -200,6 +240,3 @@ function showAxis(){
     showing_axis = true;
   }
 }
-
-// Invoca o loop da animação
-animate();
