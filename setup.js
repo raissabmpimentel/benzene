@@ -2,7 +2,7 @@
 var startTime = Date.now( ) * 0.0005;
 var scene = new THREE.Scene();
 var header = document.getElementById("controllers");
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight - header.offsetHeight), 0.1, 1000);
+var camera = new THREE.PerspectiveCamera(25, window.innerWidth / (window.innerHeight - header.offsetHeight), 0.1, 1000);
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
 alpha:true,
@@ -13,7 +13,7 @@ var axesHelper = new THREE.AxesHelper(4);
 
 // Posicionar camera
 camera.up.set(0,0,1);
-camera.position.set(0,0,7);
+camera.position.set(0,0,18);
 camera.lookAt(0,0,0);
 
 // Controle da câmera
