@@ -11,7 +11,7 @@ var cylinderMesh = function( pointX, pointY )
         0, 0, 0, 1));
     var edgeGeometry = new THREE.CylinderGeometry(0.12, 0.12, direction.length(), 20, 32);
     var edge = new THREE.Mesh(edgeGeometry,  new THREE.MeshLambertMaterial( { color: 0x333333 }))
-    edge.applyMatrix4(orientation);
+    edge.applyMatrix(orientation);
     edge.position.x = (pointY.x + pointX.x) / 2;
     edge.position.y = (pointY.y + pointX.y) / 2;
     edge.position.z = (pointY.z + pointX.z) / 2;
