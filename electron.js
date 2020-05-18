@@ -18,9 +18,6 @@ var e_labelb4 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMater
 var e_labelb5 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 var e_labelb6 = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
 
-/*var e_labela_pair = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));
-var e_labelb_pair = new THREE.Mesh( new THREE.Geometry(), new THREE.MeshLambertMaterial( { color: 0000000 } ));*/
-
 var loader = new THREE.FontLoader();
 loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
 
@@ -41,8 +38,6 @@ loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.js
   e_labela5.geometry = e_label_geometry;
   e_labela6.geometry = e_label_geometry;
 
-  //e_labela_pair.geometry = e_label_geometry;
-
   var sign_label_geometry = new THREE.TextGeometry( "-", {
     font : font,
     size : 1.5,
@@ -60,7 +55,6 @@ loader.load( 'https://threejs.org//examples/fonts/helvetiker_regular.typeface.js
   e_labelb5.geometry = sign_label_geometry;
   e_labelb6.geometry = sign_label_geometry;
 
-  //e_labelb_pair.geometry = sign_label_geometry;
 } );
 
 // Ajustar posicao dos labels
@@ -79,11 +73,6 @@ positioningElectronLabel(e_labela3, e_labelb3);
 positioningElectronLabel(e_labela4, e_labelb4);
 positioningElectronLabel(e_labela5, e_labelb5);
 positioningElectronLabel(e_labela6, e_labelb6);
-
-/*e_labela_pair.position.set(2,0,1);
-e_labelb_pair.position.set(3.1,0,1.6);
-e_labela_pair.rotation.x = Math.PI/2;
-e_labelb_pair.rotation.x = Math.PI/2;*/
 
 // Definir orientacao das setas de spin
 var from = new THREE.Vector3(0, 0, 0);
@@ -106,11 +95,6 @@ arrow_d2.setLength(2.2,1,0.5);
 var arrow_d3 = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
 arrow_d3.setLength(2.2,1,0.5);
 
-/*var arrow_u_pair = new THREE.ArrowHelper(direction.normalize(), from, 1, 0xff0000);
-arrow_u_pair.setLength(2.2,1,0.5);
-var arrow_d_pair = new THREE.ArrowHelper(direction.normalize(), from, 1, 0x0000ff);
-arrow_d_pair.setLength(2.2,1,0.5);*/
-
 // Construir eletron base
 var electron = new THREE.Mesh(e_geometry, e_material);
 
@@ -122,9 +106,6 @@ var electron_up3 = new THREE.Mesh();
 var electron_down1 = new THREE.Mesh();
 var electron_down2 = new THREE.Mesh();
 var electron_down3 = new THREE.Mesh();
-
-/*var electron_up_pair = new THREE.Mesh();
-var electron_down_pair = new THREE.Mesh();*/
 
 // Adicionar eletron e spin ao Mesh
 function creatingElectronWithSpin(electron_with_spin, electron, arrow, down) {
@@ -142,15 +123,6 @@ creatingElectronWithSpin(electron_up3, electron, arrow_u3, false);
 creatingElectronWithSpin(electron_down1, electron, arrow_d1, true);
 creatingElectronWithSpin(electron_down2, electron, arrow_d2, true);
 creatingElectronWithSpin(electron_down3, electron, arrow_d3, true);
-
-/*electron_up_pair.add(electron.clone());
-electron_up_pair.add(arrow_u_pair);
-electron_down_pair.add(electron.clone());
-electron_down_pair.add(arrow_d_pair);
-electron_down_pair.rotation.x = Math.PI; // Rotacionar para spin down
-// Definir posicoes relativas entre eletrons
-electron_up_pair.position.set(1.3,0,0);
-electron_down_pair.position.set(-1.3,0,0);*/
 
 //Grupo de eletrons a serem animados
 electron_up_1 = new THREE.Group();
@@ -175,10 +147,3 @@ creatingElectron(electron_up_3, electron_up3, e_labela3, e_labelb3);
 creatingElectron(electron_down_1, electron_down1, e_labela4, e_labelb4);
 creatingElectron(electron_down_2, electron_down2, e_labela5, e_labelb5);
 creatingElectron(electron_down_3, electron_down3, e_labela6, e_labelb6);
-
-// Grupo de par de eletrons a ser animado
-/*var electron_pair = new THREE.Group();
-electron_pair.add(electron_up_pair);   // Adicionar eletron com spin up
-electron_pair.add(electron_down_pair); // Adicionar eletron com spin down
-electron_pair.add(e_labela_pair);      // Adicionar label 1
-electron_pair.add(e_labelb_pair);      // Adicionar label 2*/
