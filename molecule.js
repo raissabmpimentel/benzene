@@ -1,4 +1,4 @@
-// Função copiada de https://stackoverflow.com/questions/15316127/three-js-line-vector-to-cylinder
+// Função encontrada em https://stackoverflow.com/questions/15316127/three-js-line-vector-to-cylinder
 // Função que cria um cilindro entre dois pontos
 var cylinderMesh = function( pointX, pointY )
 {

@@ -55,24 +55,26 @@ var tolerance = 0.01; // utilizada na análise da restrição do movimento dos e
 
 // Atualizando a posição (x, y) do elétron de acordo com o movimento
 // de translação que ocorre no tempo
-function updatePosition(electron, n, time) {
+function updatePosition(electron, id, time) {
   // Computando a contribuição angular no movimento de translação do elétron
   // ocasionada pelo intervalo pelo de tempo que passou desde que a animação
   // foi iniciada (desde o play)
-  wt = orientation*w_tran*0.04*(time - startTime);  // dAng = w*dT
+  wt = orientation*w_tran*0.04*(time - start_time);  // dAng = w*dT
 
   // Se a animação for pausada, o ângulo inicial do movimento de cada
   // elétron é atualizado, portanto, é preciso computar o ângulo de
   // deslocamento de forma distinta para cada elétron
   var angle;
-  if(n == 1){
+  if(id == 1){
     angle = initial_angle_1 + wt;
 
     // Limitando o movimento do elétron a um percurso de 60º em torno
     // da sua posição inicial
     if(angle > Math.PI/2 + tolerance || angle < Math.PI/6 - tolerance){
       orientation *= -1;
-      startTime = Date.now( ) * 0.0005;
+      start_time = Date.now( ) * 0.0005;
+
+      // Saturando a posição angular máxima dos elétrons
       if(angle > Math.PI/2){
         initial_angle_1 = Math.PI/2;
         initial_angle_2 = 7*Math.PI/6;
@@ -80,7 +82,9 @@ function updatePosition(electron, n, time) {
         initial_angle_4 = -Math.PI/6;
         initial_angle_5 = 3*Math.PI/6;
         initial_angle_6 = 7*Math.PI/6;
-      } else{
+      }
+      // Saturando a posição angular mínima dos elétrons
+      else{
         initial_angle_1 = Math.PI/6;
         initial_angle_2 = 5*Math.PI/6;
         initial_angle_3 = 3*Math.PI/2;
@@ -88,15 +92,14 @@ function updatePosition(electron, n, time) {
         initial_angle_5 = 5*Math.PI/6;
         initial_angle_6 = 3*Math.PI/2;
       }
-      //console.log('entrou');
     }
-  } else if(n == 2){
+  } else if(id == 2){
     angle = initial_angle_2 + wt;
-  } else if(n == 3){
+  } else if(id == 3){
     angle = initial_angle_3 + wt;
-  } else if(n == 4){
+  } else if(id == 4){
     angle = initial_angle_4 - wt;
-  } else if(n == 5){
+  } else if(id == 5){
     angle = initial_angle_5 - wt;
   } else{
     angle = initial_angle_6 - wt;
@@ -143,7 +146,7 @@ function updateInitialAngle(){
   initial_angle_6 -= wt;
 }
 
-var startTime; // tempo inicial da animação
+var start_time; // tempo inicial da animação
 
 // Função invocada após o usuário clicar no botão play/pause
 function play(){
@@ -162,7 +165,7 @@ function play(){
   // Se a animação não estivesse rodando, o click significa querer rodar a animação
   else{
     // Atualiza o tempo inicial da animação para o instante atual
-    startTime = Date.now( ) * 0.0005;
+    start_time = Date.now( ) * 0.0005;
 
     // Atualiza cor e label do botão
     document.getElementById('play_button').value = 'Pause';
