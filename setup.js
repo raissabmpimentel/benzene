@@ -9,7 +9,7 @@ antialias:true
 
 // Posicionar camera
 camera.up.set(0,0,1);
-camera.position.set(0,0,18);
+camera.position.set(0,0,15);
 camera.lookAt(0,0,0);
 
 // Controle da câmera
