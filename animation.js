@@ -58,7 +58,7 @@ var tolerance = 0.01; // utilizada na análise da restrição do movimento dos e
 function updatePosition(electron, id, time) {
   // Computando a contribuição angular no movimento de translação do elétron
   // ocasionada pelo intervalo pelo de tempo que passou desde que a animação
-  // foi iniciada (desde o play)
+  // foi iniciada
   wt = orientation*w_tran*0.04*(time - start_time);  // dAng = w*dT
 
   // Se a animação for pausada, o ângulo inicial do movimento de cada
